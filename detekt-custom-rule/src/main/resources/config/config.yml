@@ -1,0 +1,3 @@
+DemoRuleSet:
+  TooManyIfStatements:
+    active: true
