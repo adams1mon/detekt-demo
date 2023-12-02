@@ -25,11 +25,6 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: 'gradle'
-          cache-dependency-path: |
-            detekt-custom-rule/*.gradle*
-            detekt-custom-rule/**/gradle-wrapper.properties
-            DetektPlayground/*.gradle*
-            DetektPlayground/**/gradle-wrapper.properties
 
       - name: Test detekt-custom-rule
         run: cd detekt-custom-rule && ./gradlew check --no-daemon
