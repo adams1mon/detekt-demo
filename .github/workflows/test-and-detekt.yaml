@@ -1,0 +1,65 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request_target:
+    branches:
+      - main
+
+jobs:
+  test-custom-rule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: 'gradle'
+          cache-dependency-path: |
+            detekt-custom-rule/*.gradle*
+            detekt-custom-rule/**/gradle-wrapper.properties
+            DetektPlayground/*.gradle*
+            DetektPlayground/**/gradle-wrapper.properties
+
+      - name: Test detekt-custom-rule
+        run: cd detekt-custom-rule && ./gradlew check --no-daemon
+
+      - name: Publish detekt-custom-rule as a local maven artifact
+        run: ./gradlew publishDetektRulePublicationToMavenLocal
+
+      - name: Run detekt on DetektPlayground (with type resolution)
+        run: cd DetektPlayground && ./gradlew detektMain --no-daemon
+
+      # Make sure we always run this upload task,
+      # because the previous step may fail if there are findings.
+      - name: Upload SARIF to GitHub using the upload-sarif action
+        uses: github/codeql-action/upload-sarif@v2
+        if: success() || failure()
+        with:
+          sarif_file: DetektPlayground/build/reports/detekt/main.sarif
+#
+#  without-type-resolution:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout Repo
+#        uses: actions/checkout@v3
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: 17
+#
+#      - name: Run detekt
+#        run: ./gradlew detekt
+#
+#      # Make sure we always run this upload task,
+#      # because the previous step may fail if there are findings.
+#      - name: Upload SARIF to GitHub using the upload-sarif action
+#        uses: github/codeql-action/upload-sarif@v2
+#        if: success() || failure()
+#        with:
+#          sarif_file: build/reports/detekt/detekt.sarif
