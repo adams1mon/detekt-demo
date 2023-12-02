@@ -42,9 +42,9 @@ detekt {
     config.setFrom(file("config/detekt/custom_config.yaml"))
     buildUponDefaultConfig = true
 
-    // to support relative paths
-    // ugly hack here because of the repo root not being the project root
-    basePath = "detekt-demo/" + rootProject.projectDir.absolutePath
+    // to support relative paths?
+    // this doesn't really work to generate links to files on github...
+    basePath = rootProject.projectDir.absolutePath
 }
 
 // settings for all of detekt's tasks
