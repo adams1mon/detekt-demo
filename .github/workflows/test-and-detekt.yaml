@@ -11,6 +11,10 @@ on:
 jobs:
   test-custom-rule:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -38,36 +42,13 @@ jobs:
 
       - name: Archive detekt results
         uses: actions/upload-artifact@v3
+        if: success() || failure() # run even if previous steps have failed
         with:
           name: detekt-results
           path: DetektPlayground/build/reports/*
 
-      # Make sure we always run this upload task,
-      # because the previous step may fail if there are findings.
       - name: Upload SARIF to GitHub using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v2
-        if: success() || failure()
+        if: success() || failure() # run even if previous steps have failed
         with:
           sarif_file: DetektPlayground/build/reports/detekt/main.sarif
-#
-#  without-type-resolution:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout Repo
-#        uses: actions/checkout@v3
-#
-#      - name: Setup Java
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: 17
-#
-#      - name: Run detekt
-#        run: ./gradlew detekt
-#
-#      # Make sure we always run this upload task,
-#      # because the previous step may fail if there are findings.
-#      - name: Upload SARIF to GitHub using the upload-sarif action
-#        uses: github/codeql-action/upload-sarif@v2
-#        if: success() || failure()
-#        with:
-#          sarif_file: build/reports/detekt/detekt.sarif
