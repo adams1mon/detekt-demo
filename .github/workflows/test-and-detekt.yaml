@@ -1,3 +1,5 @@
+name: Detekt Demo
+
 on:
   push:
     branches:
@@ -32,7 +34,13 @@ jobs:
         run: cd detekt-custom-rule && ./gradlew publishDetektRulePublicationToMavenLocal
 
       - name: Run detekt on DetektPlayground (with type resolution)
-        run: cd DetektPlayground && ./gradlew detektMain --no-daemon
+        run: cd DetektPlayground && ./gradlew detektMain
+
+      - name: Archive detekt results
+        uses: actions/upload-artifact@v3
+        with:
+          name: detekt-results
+          path: DetektPlayground/build/reports/*
 
       # Make sure we always run this upload task,
       # because the previous step may fail if there are findings.
