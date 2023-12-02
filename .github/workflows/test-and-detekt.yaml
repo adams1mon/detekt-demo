@@ -45,7 +45,7 @@ jobs:
         if: success() || failure() # run even if previous steps have failed
         with:
           name: detekt-results
-          path: DetektPlayground/build/reports/*
+          path: DetektPlayground/build/reports/detekt/*
 
       - name: Upload SARIF to GitHub using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v2

@@ -44,7 +44,8 @@ detekt {
 
     // to support relative paths?
     // this doesn't really work to generate links to files on github...
-    basePath = rootProject.projectDir.absolutePath
+//    basePath = rootProject.projectDir.absolutePath
+    basePath = "detekt-demo/$projectDir"
 }
 
 // settings for all of detekt's tasks
