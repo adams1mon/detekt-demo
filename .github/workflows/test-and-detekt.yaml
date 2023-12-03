@@ -12,13 +12,12 @@ env:
   CODE_DIR: detekt-demo
 
 jobs:
-  test-and-publish-custom-rule:
-    name: Test and publish custom detekt rule
+  test-custom-rule:
     runs-on: ubuntu-latest
-#    permissions:
-#      actions: read
-#      contents: read
-#      security-events: write
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -36,14 +35,6 @@ jobs:
       - name: Publish detekt-custom-rule as a local maven artifact
         run: cd ${{ env.CODE_DIR }} && ./gradlew detekt-custom-rule:publishDetektRulePublicationToMavenLocal
 
-  detekt-and-publish-reports:
-    name: Run detekt and publish reports
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-    steps:
       - name: Run detekt on detekt-playground (with type resolution)
         run: cd ${{ env.CODE_DIR }} && ./gradlew detekt-playground:detektMain
 
