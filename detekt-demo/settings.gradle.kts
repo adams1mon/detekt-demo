@@ -11,5 +11,5 @@ plugins {
 }
 
 rootProject.name = "detekt-demo"
-include(":detekt-custom-rule")
-include(":detekt-playground")
+include("detekt-custom-rule")
+include("detekt-playground")
