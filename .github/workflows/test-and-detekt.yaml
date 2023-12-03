@@ -30,23 +30,23 @@ jobs:
           cache: 'gradle'
 
       - name: Test detekt-custom-rule
-        run: cd $CODE_DIR && ./gradlew detekt-custom-rule:check --no-daemon
+        run: cd ${{ env.CODE_DIR }} && ./gradlew detekt-custom-rule:check --no-daemon
 
       - name: Publish detekt-custom-rule as a local maven artifact
-        run: cd $CODE_DIR && ./gradlew detekt-custom-rule:publishDetektRulePublicationToMavenLocal
+        run: cd ${{ env.CODE_DIR }} && ./gradlew detekt-custom-rule:publishDetektRulePublicationToMavenLocal
 
       - name: Run detekt on detekt-playground (with type resolution)
-        run: cd $CODE_DIR && ./gradlew detekt-playground:detektMain
+        run: cd ${{ env.CODE_DIR }} && ./gradlew detekt-playground:detektMain
 
       - name: Archive detekt results
         uses: actions/upload-artifact@v3
         if: success() || failure() # run even if previous steps have failed
         with:
           name: detekt-results
-          path: $CODE_DIR/detekt-playground/build/reports/detekt/*
+          path: ${{ env.CODE_DIR }}/detekt-playground/build/reports/detekt/*
 
       - name: Upload SARIF to GitHub using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v2
         if: success() || failure() # run even if previous steps have failed
         with:
-          sarif_file: $CODE_DIR/detekt-playground/build/reports/detekt/main.sarif
+          sarif_file: ${{ env.CODE_DIR }}/detekt-playground/build/reports/detekt/main.sarif
