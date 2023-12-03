@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 }
 
-group = "edu.demo.detekt"
+group = "edu.detektplayground"
 version = "1.0-SNAPSHOT"
 
 dependencies {
